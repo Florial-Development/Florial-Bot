@@ -3,7 +3,8 @@ package bot;
 import com.jagrosh.jdautilities.command.CommandClient;
 import com.jagrosh.jdautilities.command.CommandClientBuilder;
 import commands.*;
-import database.BotDatabase;
+import databases.BotDatabase;
+import databases.StoryDatabase;
 import listeners.*;
 import lombok.Getter;
 import net.dv8tion.jda.api.JDA;
@@ -22,8 +23,9 @@ import java.util.concurrent.TimeUnit;
 public class FlorialBot {
 
     private static final BotDatabase botDatabase = new BotDatabase();
-    private static final String BOT_TOKEN = "";
+    private static final StoryDatabase storyDatabase = new StoryDatabase();
 
+    private static final String BOT_TOKEN = "";
     @Getter
     private static JDA discordBot;
     @Getter private static Role trustedRole;
@@ -38,20 +40,20 @@ public class FlorialBot {
 
         initializeDiscord();
 
-        botDatabase.createDatabaseIfNotExists();
+        storyDatabase.getConnection();
     }
 
 
     private static void initializeDiscord() {
 
-        CommandClientBuilder builder = new CommandClientBuilder();
-        builder.setPrefix("/");
-        builder.forceGuildOnly("801913598481268766");
-        builder.setOwnerId("349819317589901323");
-        builder.setCoOwnerIds("366301720109776899");
-        builder.addSlashCommands(new VerificationButtonSendCommand(), new SendCommand(), new WarnCommand(), new MuteCommand(), new RolesChannelSetupCommand(), new TestCommand(), new CreateDevBlogCommand(), new ResetTimerCommand(), new NewDatabaseValueCommand(), new DiscordProfileCommand());
-        builder.setHelpWord(null);
-        builder.setActivity(Activity.watching("Florial"));
+        CommandClientBuilder builder = new CommandClientBuilder()
+                .setPrefix("/")
+                .forceGuildOnly("801913598481268766")
+                .setOwnerId("349819317589901323")
+                .setCoOwnerIds("366301720109776899")
+                .addSlashCommands(new VerificationButtonSendCommand(), new SendCommand(), new WarnCommand(), new MuteCommand(), new RolesChannelSetupCommand(), new TestCommand(), new CreateDevBlogCommand(), new ResetTimerCommand(), new DiscordProfileCommand())
+                .setHelpWord(null)
+                .setActivity(Activity.watching("Florial"));
         CommandClient commandClient = builder.build();
 
         JDABuilder discordBotBuilder = JDABuilder.createDefault(BOT_TOKEN,
@@ -63,7 +65,7 @@ public class FlorialBot {
                         GatewayIntent.GUILD_EMOJIS_AND_STICKERS,
                         GatewayIntent.GUILD_PRESENCES,
                         GatewayIntent.MESSAGE_CONTENT)
-                .addEventListeners(commandClient, new ApplicationFormListener(), new VerificationButtonListener(), new JoinLeaveServerListener(), new DMListener(), new AcceptDenyButtonListener(), new SubscribeButtonListener(), new RoleButtonListener(), new DevBlogButtonListener())
+                .addEventListeners(commandClient, new ApplicationFormListener(), new VerificationButtonListener(), new JoinLeaveServerListener(), new DMListener(), new AcceptDenyButtonListener(), new SubscribeButtonListener(), new RoleButtonListener(), new DevBlogButtonListener(), new ExperienceGainListener())
                 .setActivity(Activity.watching("Florial"));
 
         discordBot = discordBotBuilder.build();

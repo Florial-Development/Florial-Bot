@@ -36,17 +36,16 @@ public class ApplicationFormListener extends ListenerAdapter {
             event.reply("Request submitted.").setEphemeral(true).queue();
 
 
-            EmbedBuilder e = new EmbedBuilder();
-            e.setTitle("**Verification Application of " + user.getName() + "**");
-            e.setFooter("Press the buttons below to accept or deny entry.");
-            e.addField("**How did you find Florial?**", where, false);
-            e.addField("**Have you read the rules? Describe a rule.**", did, false);
-            e.addField("**What do you plan to do in Florial?**", why, false);
-            e.addField("**Account Created:** ", "" + user.getTimeCreated(), false);
-            e.setColor(Color.pink);
-            e.setThumbnail(user.getAvatarUrl());
-            e.setImage("https://media.discordapp.net/attachments/842010486009626625/1055353813965475870/bow.png");
-            e.setTimestamp(Instant.now());
+            EmbedBuilder e = new EmbedBuilder().setTitle("**Verification Application of " + user.getName() + "**")
+                    .setFooter("Press the buttons below to accept or deny entry.")
+                    .addField("**How did you find Florial?**", where, false)
+                    .addField("**Have you read the rules? Describe a rule.**", did, false)
+                    .addField("**What do you plan to do in Florial?**", why, false)
+                    .addField("**Account Created:** ", "" + user.getTimeCreated(), false)
+                    .setColor(Color.pink)
+                    .setThumbnail(user.getAvatarUrl())
+                    .setImage("https://media.discordapp.net/attachments/842010486009626625/1055353813965475870/bow.png")
+                    .setTimestamp(Instant.now());
 
             verificationApplicationChannel.sendMessageEmbeds(e.build()).queue();
             verificationApplicationChannel.sendMessage("**Make sure to look at their profile!:** " + user.getAsMention()).queue();

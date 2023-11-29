@@ -3,12 +3,9 @@ package commands;
 import com.jagrosh.jdautilities.command.SlashCommand;
 import com.jagrosh.jdautilities.command.SlashCommandEvent;
 import com.jagrosh.jdautilities.doc.standard.CommandInfo;
-import database.BotDatabase;
-import database.DiscordProfile;
-import lombok.SneakyThrows;
+import databases.BotDatabase;
+import databases.models.DiscordProfile;
 import net.dv8tion.jda.api.Permission;
-
-import java.sql.SQLException;
 
 @CommandInfo(name = "reset")
 public class ResetTimerCommand extends SlashCommand {
@@ -26,19 +23,11 @@ public class ResetTimerCommand extends SlashCommand {
 
         DiscordProfile profile;
 
-        try {
-            profile = botDatabase.findProfileByUUID(slashCommandEvent.getUser().getIdLong());
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        profile = botDatabase.findProfileByUUID(slashCommandEvent.getUser().getIdLong());
 
         profile.setReadWhen(System.currentTimeMillis() + (26 * 3600000));
 
-        try {
-            profile.save();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        profile.save();
 
 
     }

@@ -4,6 +4,7 @@ import com.jagrosh.jdautilities.command.SlashCommand;
 import com.jagrosh.jdautilities.command.SlashCommandEvent;
 import com.jagrosh.jdautilities.doc.standard.CommandInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
 
 import java.awt.*;
@@ -17,6 +18,9 @@ public class VerificationButtonSendCommand extends SlashCommand {
 
     public VerificationButtonSendCommand() {
         this.name = "verify7";
+        this.userPermissions = new Permission[]{Permission.MESSAGE_MANAGE};
+
+
 
     }
     @Override

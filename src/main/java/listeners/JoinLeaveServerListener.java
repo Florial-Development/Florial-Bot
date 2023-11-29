@@ -1,7 +1,7 @@
 package listeners;
 
-import database.BotDatabase;
-import database.DiscordProfile;
+import databases.BotDatabase;
+import databases.models.DiscordProfile;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberRemoveEvent;
@@ -17,15 +17,16 @@ import java.util.concurrent.TimeUnit;
 
 public class JoinLeaveServerListener extends ListenerAdapter {
 
-    private static final BotDatabase botDatabase = new BotDatabase();
 
     @Override
     public void onGuildMemberJoin(@NotNull GuildMemberJoinEvent event) {
 
         User user = event.getUser();
 
+        BotDatabase db = BotDatabase.getInstance();
+
         try {
-            botDatabase.editDiscordProfiles(new DiscordProfile(Long.parseLong(user.getId()), 0, 0, 0, 0, 1), true);
+            db.editDiscordProfiles(new DiscordProfile(Long.parseLong(user.getId()), 0, 0, 0, 0, 1), true);
         } catch (SQLException e) {
             throw new RuntimeException("Exception: " + e + user + " " + user.getId());
         }
@@ -33,6 +34,7 @@ public class JoinLeaveServerListener extends ListenerAdapter {
         ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
         user.openPrivateChannel().queue(privateChannel -> {
+            db.findProfileByUUID(Long.parseLong(user.getId())).fetchProfile(privateChannel, user);
             privateChannel.sendMessage("Welcome to Florial official! **Did you know we have an indie game in development?** ***YEP!*** Want to learn more? Click Here: https://discord.com/channels/801913598481268766/1165445508127526932/1165446270555541536 for a preview!").queue();
             privateChannel.sendMessage("**Subscribe to devblog pings?** Collect devblogs by Participating in reading them at least 24 hours after they're announced, and earn rewards overtime depending on how many you collect!").queue();
 
@@ -50,11 +52,7 @@ public class JoinLeaveServerListener extends ListenerAdapter {
     @Override
     public void onGuildMemberRemove(@NotNull GuildMemberRemoveEvent event) {
 
-        try {
-            botDatabase.findProfileByUUID(Long.parseLong(event.getUser().getId())).delete();
-        } catch (SQLException e) {
-            throw new RuntimeException("Exception: " + e + event.getUser() + " " + event.getUser().getId());
-        }
+        BotDatabase.getInstance().findProfileByUUID(Long.parseLong(event.getUser().getId())).delete();
 
     }
 }
