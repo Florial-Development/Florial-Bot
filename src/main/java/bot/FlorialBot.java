@@ -3,7 +3,6 @@ package bot;
 import com.jagrosh.jdautilities.command.CommandClient;
 import com.jagrosh.jdautilities.command.CommandClientBuilder;
 import commands.*;
-import databases.BotDatabase;
 import databases.models.DiscordProfile;
 import listeners.*;
 import lombok.Getter;
@@ -15,7 +14,6 @@ import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 
-import java.sql.SQLException;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -36,7 +34,7 @@ public class FlorialBot {
     private static List<DiscordProfile> activeQuestCache;
 
 
-    public static void main(String[] args) throws SQLException {
+    public static void main(String[] args) {
 
         FlorialBot bot = new FlorialBot();
 

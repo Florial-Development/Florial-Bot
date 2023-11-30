@@ -104,11 +104,14 @@ public class DiscordProfile {
 
         if (this.questProgress >= amountNeeded) {
 
+            int earnedTokens = new Random().nextInt(15);
+            int experienceGained = this.lvl * 100 / 12;
+
             EmbedBuilder e = new EmbedBuilder().setTitle("<:crystalheart:1168455971958439936>          **DAILY QUEST COMPLETED!**        <:crystalheart:1168455971958439936>")
                     .addField("**Description**", quest.getDescription(), false)
                     .addField("**Progress**", "" + generateProgressBar((int) Math.round(((double) this.questProgress / amountNeeded) * 100)), false)
-                    .addField("**Tokens Earned**", "" + generateProgressBar((int) Math.round(((double) this.questProgress / amountNeeded) * 100)), false)
-                    .addField("**XP Earned**", "" + generateProgressBar((int) Math.round(((double) this.questProgress / amountNeeded) * 100)), false)
+                    .addField("**Tokens Earned**", "`" + earnedTokens + "`", false)
+                    .addField("**XP Earned**", "`" + experienceGained + "`", false)
 
 
                     .addField("**━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━**", "", true)
@@ -117,8 +120,8 @@ public class DiscordProfile {
                     .setThumbnail("https://media.discordapp.net/attachments/564923688621834251/1179724541283536957/arrowup.png?ex=657ad318&is=65685e18&hm=eeb2a0eb2e96bd0df9429e94d1f74a78b85020d67ee9827c6af3d3c09507b121&=&format=webp&quality=lossless");
 
             this.resetQuest();
-            gainExperience(this.lvl * 100 / 12, user);
-            this.xp = new Random().nextInt(15);
+            gainExperience(experienceGained, user);
+            this.tokens = earnedTokens;
 
             user.openPrivateChannel().queue(privateChannel -> {
                 privateChannel.sendMessageEmbeds(e.build()).queue();

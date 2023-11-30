@@ -38,7 +38,6 @@ public class ProgressGainListener extends ListenerAdapter {
             ZonedDateTime lastQuestDateTime = ZonedDateTime.ofInstant(Instant.ofEpochSecond(profile.getLastQuest()), cstZone);
 
             ZonedDateTime next12AM;
-            ZonedDateTime.now(cstZone);// If the current hour is greater than or equal to 0 (past midnight), set next 12 AM to the next day
             next12AM = ZonedDateTime.now(cstZone).with(LocalTime.of(0, 0)).plusDays(1);
 
             if (lastQuestDateTime.isBefore(next12AM)) {
