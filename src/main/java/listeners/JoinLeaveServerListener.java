@@ -26,7 +26,7 @@ public class JoinLeaveServerListener extends ListenerAdapter {
         BotDatabase db = BotDatabase.getInstance();
 
         try {
-            db.editDiscordProfiles(new DiscordProfile(Long.parseLong(user.getId()), 0, 0, 0, 0, 1), true);
+            db.editDiscordProfiles(new DiscordProfile(Long.parseLong(user.getId()), 0, 0, 0, 0, 0, 1, 0, 0), true);
         } catch (SQLException e) {
             throw new RuntimeException("Exception: " + e + user + " " + user.getId());
         }

@@ -4,7 +4,7 @@ import com.jagrosh.jdautilities.command.CommandClient;
 import com.jagrosh.jdautilities.command.CommandClientBuilder;
 import commands.*;
 import databases.BotDatabase;
-import databases.StoryDatabase;
+import databases.models.DiscordProfile;
 import listeners.*;
 import lombok.Getter;
 import net.dv8tion.jda.api.JDA;
@@ -16,14 +16,12 @@ import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 
 import java.sql.SQLException;
+import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 public class FlorialBot {
-
-    private static final BotDatabase botDatabase = new BotDatabase();
-    private static final StoryDatabase storyDatabase = new StoryDatabase();
 
     private static final String BOT_TOKEN = "";
     @Getter
@@ -35,12 +33,17 @@ public class FlorialBot {
     @Getter private static TextChannel botDMs;
     @Getter private static TextChannel verifyChannel;
 
+    private static List<DiscordProfile> activeQuestCache;
+
 
     public static void main(String[] args) throws SQLException {
 
+        FlorialBot bot = new FlorialBot();
+
         initializeDiscord();
 
-        storyDatabase.getConnection();
+        Runtime.getRuntime().addShutdownHook(new Thread(bot::shutdownBot));
+
     }
 
 
@@ -51,7 +54,7 @@ public class FlorialBot {
                 .forceGuildOnly("801913598481268766")
                 .setOwnerId("349819317589901323")
                 .setCoOwnerIds("366301720109776899")
-                .addSlashCommands(new VerificationButtonSendCommand(), new SendCommand(), new WarnCommand(), new MuteCommand(), new RolesChannelSetupCommand(), new TestCommand(), new CreateDevBlogCommand(), new ResetTimerCommand(), new DiscordProfileCommand())
+                .addSlashCommands(new VerificationButtonSendCommand(), new SendCommand(), new WarnCommand(), new MuteCommand(), new RolesChannelSetupCommand(), new TestCommand(), new CreateDevBlogCommand(), new ResetTimerCommand(), new DiscordProfileCommand(), new LevelSetCommand(), new XPSetCommand(), new DailyQuestCommand())
                 .setHelpWord(null)
                 .setActivity(Activity.watching("Florial"));
         CommandClient commandClient = builder.build();
@@ -65,7 +68,7 @@ public class FlorialBot {
                         GatewayIntent.GUILD_EMOJIS_AND_STICKERS,
                         GatewayIntent.GUILD_PRESENCES,
                         GatewayIntent.MESSAGE_CONTENT)
-                .addEventListeners(commandClient, new ApplicationFormListener(), new VerificationButtonListener(), new JoinLeaveServerListener(), new DMListener(), new AcceptDenyButtonListener(), new SubscribeButtonListener(), new RoleButtonListener(), new DevBlogButtonListener(), new ExperienceGainListener())
+                .addEventListeners(commandClient, new ApplicationFormListener(), new VerificationButtonListener(), new JoinLeaveServerListener(), new DMListener(), new AcceptDenyButtonListener(), new SubscribeButtonListener(), new RoleButtonListener(), new DevBlogButtonListener(), new ProgressGainListener(), new StoryButtonListener())
                 .setActivity(Activity.watching("Florial"));
 
         discordBot = discordBotBuilder.build();
@@ -86,5 +89,18 @@ public class FlorialBot {
             RolesChannelSetupCommand.init();
         }, 1, TimeUnit.SECONDS);
 
+    }
+
+    private void shutdownBot() {
+        if (discordBot != null) {
+            discordBot.shutdown();
+        }
+    }
+
+    public static List<DiscordProfile> getActiveQuestCache() {
+        return activeQuestCache;
+    }
+    public static void addUUIDToActiveQuestCache(DiscordProfile profile) {
+        activeQuestCache.add(profile);
     }
 }

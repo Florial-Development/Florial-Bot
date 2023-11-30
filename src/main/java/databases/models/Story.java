@@ -3,9 +3,6 @@ package databases.models;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-
 public class Story {
 
     @Getter

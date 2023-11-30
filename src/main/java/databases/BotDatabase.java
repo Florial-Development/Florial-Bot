@@ -41,7 +41,7 @@ public class BotDatabase {
 
         Statement statement = getConnection().createStatement();
 
-        String sql = "CREATE TABLE IF NOT EXISTS discord_profiles(uuid varchar(36) primary key, devblogs int, tokens int, readwhen long, xp int, lvl int)";
+        String sql = "CREATE TABLE IF NOT EXISTS discord_profiles(uuid varchar(36) primary key, devblogs int, tokens int, readwhen long, xp int, lvl int, quest_progress int, quest_id int, lastquest long)";
         statement.execute(sql);
 
         String createIndexSQL = "CREATE INDEX idx_uuid ON discord_profiles (uuid)";
@@ -50,15 +50,18 @@ public class BotDatabase {
 
     public void editDiscordProfiles(DiscordProfile data, boolean isCreating) throws SQLException{
 
-        PreparedStatement statement = isCreating ? getConnection().prepareStatement("INSERT INTO discord_profiles(uuid, devblogs, tokens, readwhen, xp, lvl) VALUES (?, ?, ?, ?, ?, ?)")
-                : getConnection().prepareStatement("UPDATE discord_profiles SET devblogs = ?, tokens = ?, readwhen = ?, xp = ?, lvl = ? WHERE uuid = ?");
+        PreparedStatement statement = isCreating ? getConnection().prepareStatement("INSERT INTO discord_profiles(uuid, devblogs, tokens, readwhen, xp, lvl, quest_progress, quest_id, lastquest) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)")
+                : getConnection().prepareStatement("UPDATE discord_profiles SET devblogs = ?, tokens = ?, readwhen = ?, xp = ?, lvl = ?, quest_progress = ?, quest_id = ?, lastquest = ? WHERE uuid = ?");
 
-        statement.setLong(isCreating ? 1 : 6, data.getUuid());
+        statement.setLong(isCreating ? 1 : 9, data.getUuid());
         statement.setInt(isCreating ? 2 : 1, data.getDevBlogs());
         statement.setInt(isCreating ? 3 : 2, data.getTokens());
         statement.setLong(isCreating ? 4 : 3, data.getReadWhen());
-        statement.setLong(isCreating ? 5 : 4, data.getXp());
-        statement.setLong(isCreating ? 6 : 5, data.getLvl());
+        statement.setInt(isCreating ? 5 : 4, data.getXp());
+        statement.setInt(isCreating ? 6 : 5, data.getLvl());
+        statement.setInt(isCreating ? 7 : 6, data.getQuestProgress());
+        statement.setInt(isCreating ? 8 : 7, data.getCurrentQuestId());
+        statement.setLong(isCreating ? 9 : 8, data.getLastQuest());
 
 
 
@@ -70,7 +73,7 @@ public class BotDatabase {
 
     public DiscordProfile findProfileByUUID(long u) {
         try {
-            PreparedStatement statement = getConnection().prepareStatement("SELECT devblogs, tokens, readwhen, xp, lvl FROM discord_profiles WHERE uuid = ?");
+            PreparedStatement statement = getConnection().prepareStatement("SELECT devblogs, tokens, readwhen, xp, lvl, quest_progress, quest_id, lastquest FROM discord_profiles WHERE uuid = ?");
             statement.setLong(1, u);
 
             ResultSet results = statement.executeQuery();
@@ -81,8 +84,12 @@ public class BotDatabase {
                 long readWhen = results.getLong("readwhen");
                 int xp = results.getInt("xp");
                 int lvl = results.getInt("lvl");
+                int questProgress = results.getInt("quest_progress");
+                int currentQuest = results.getInt("quest_id");
+                long lastQuest = results.getLong("lastquest");
+
                 statement.close();
-                return new DiscordProfile(u, devBlogs, tokens, readWhen, xp, lvl);
+                return new DiscordProfile(u, devBlogs, tokens, readWhen, lastQuest, xp, lvl, questProgress, currentQuest);
             } else {
                 statement.close();
                 return null;

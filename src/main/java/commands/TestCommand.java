@@ -9,6 +9,7 @@ import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 
+import java.sql.SQLException;
 import java.util.List;
 
 @CommandInfo(name = "test")
@@ -28,18 +29,20 @@ public class TestCommand extends SlashCommand {
 
         User user = slashCommandEvent.getOption("user").getAsUser();
 
-       // try {
-         //   botDatabase.editDiscordProfiles(new DiscordProfile(Long.parseLong(user.getId()), 0, 0, System.currentTimeMillis() + (25 * 3600000), 0, 1), true);
-     //   } catch (SQLException e2) {
-          //  throw new RuntimeException(e2);
-     //   }
+        try {
+            BotDatabase.getInstance().editDiscordProfiles(new DiscordProfile(Long.parseLong(user.getId()), 0, 0, 0, 0, 0, 1,0, 0), true);
+        } catch (SQLException e2) {
+            throw new RuntimeException(e2);
+        }
 
 
         DiscordProfile profile = BotDatabase.getInstance().findProfileByUUID(user.getIdLong());
 
-        profile.setReadWhen(System.currentTimeMillis() + (25 * 3600000));
+        profile.fetchProfile(slashCommandEvent.getChannel(), user);
 
-        profile.gainExperience(slashCommandEvent.getOption("amount").getAsInt(), user);
+     //   profile.setReadWhen(System.currentTimeMillis() + (25 * 3600000));
+
+       // profile.gainExperience(slashCommandEvent.getOption("amount").getAsInt(), user);
 
 
 

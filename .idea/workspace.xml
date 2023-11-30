@@ -1,25 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="ArtifactsWorkspaceSettings">
+    <artifacts-to-build>
+      <artifact name="DiscordBot:jar" />
+    </artifacts-to-build>
+  </component>
   <component name="AutoImportSettings">
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9fbec90a-acf6-4f59-b3d6-1c4d470fe761" name="Changes" comment="e">
-      <change afterPath="$PROJECT_DIR$/src/main/java/databases/StoryDatabase.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/databases/models/DiscordProfile.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/databases/models/Story.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/listeners/ExperienceGainListener.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/artifacts/DiscordBot_jar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/commands/DailyQuestCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/commands/LevelSetCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/commands/XPSetCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/listeners/StoryButtonListener.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/quests/QuestType.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/bot/FlorialBot.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/bot/FlorialBot.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/commands/DiscordProfileCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/commands/DiscordProfileCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/commands/NewDatabaseValueCommand.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/commands/ResetTimerCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/commands/ResetTimerCommand.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/commands/TestCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/commands/TestCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/commands/VerificationButtonSendCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/commands/VerificationButtonSendCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/database/BotDatabase.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/databases/BotDatabase.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/database/DiscordProfile.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/listeners/ApplicationFormListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/listeners/ApplicationFormListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/listeners/DevBlogButtonListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/listeners/DevBlogButtonListener.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/databases/BotDatabase.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/databases/BotDatabase.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/databases/StoryDatabase.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/databases/StoryDatabase.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/databases/models/DiscordProfile.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/databases/models/DiscordProfile.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/databases/models/Story.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/databases/models/Story.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/listeners/ExperienceGainListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/listeners/ProgressGainListener.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/listeners/JoinLeaveServerListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/listeners/JoinLeaveServerListener.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -50,13 +55,21 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "project.structure.last.edited": "Artifacts",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2"
   }
-}</component>
+}]]></component>
+  <component name="RunAnythingCache">
+    <option name="myCommands">
+      <command value="mvn clean package" />
+    </option>
+  </component>
   <component name="RunManager">
     <configuration name="FlorialBot" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="bot.FlorialBot" />
