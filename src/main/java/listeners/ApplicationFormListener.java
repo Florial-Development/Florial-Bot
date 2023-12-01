@@ -23,7 +23,7 @@ public class ApplicationFormListener extends ListenerAdapter {
     public void onModalInteraction(@NonNull ModalInteractionEvent event) {
         if (event.getModalId().equals("application")) {
 
-            Guild server = FlorialBot.getDiscordServer();
+            Guild server = FlorialBot.getDiscordBot().getGuildById("801913598481268766");
             TextChannel verificationApplicationChannel = server.getTextChannelById("950565475107098654");
 
             User user = event.getUser();

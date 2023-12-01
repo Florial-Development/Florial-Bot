@@ -1,5 +1,6 @@
 package listeners;
 
+import commands.RolesChannelSetupCommand;
 import databases.StoryDatabase;
 import databases.models.Story;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -7,6 +8,9 @@ import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 import java.awt.*;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class StoryButtonListener extends ListenerAdapter {
 
@@ -46,10 +50,14 @@ public class StoryButtonListener extends ListenerAdapter {
 
 
             event.replyEmbeds(e.build()).queue();
-            event.getChannel().sendMessageEmbeds(e2.build()).queue();
-            event.getChannel().sendMessageEmbeds(e3.build()).queue();
-            event.getChannel().sendMessageEmbeds(e4.build()).queue();
 
+
+            ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+            scheduler.schedule(() -> {
+                event.getChannel().sendMessageEmbeds(e2.build()).queue();
+                event.getChannel().sendMessageEmbeds(e3.build()).queue();
+                event.getChannel().sendMessageEmbeds(e4.build()).queue();
+            }, 1, TimeUnit.SECONDS);
 
             event.getMessage().delete().queue();
 

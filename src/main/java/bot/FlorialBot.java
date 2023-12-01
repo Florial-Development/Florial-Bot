@@ -14,7 +14,7 @@ import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 
-import java.util.List;
+import java.util.HashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -31,7 +31,7 @@ public class FlorialBot {
     @Getter private static TextChannel botDMs;
     @Getter private static TextChannel verifyChannel;
 
-    private static List<DiscordProfile> activeQuestCache;
+    @Getter private static final HashMap<Long, DiscordProfile> activeProfileCache = new HashMap<>();
 
 
     public static void main(String[] args) {
@@ -52,7 +52,7 @@ public class FlorialBot {
                 .forceGuildOnly("801913598481268766")
                 .setOwnerId("349819317589901323")
                 .setCoOwnerIds("366301720109776899")
-                .addSlashCommands(new VerificationButtonSendCommand(), new SendCommand(), new WarnCommand(), new MuteCommand(), new RolesChannelSetupCommand(), new TestCommand(), new CreateDevBlogCommand(), new ResetTimerCommand(), new DiscordProfileCommand(), new LevelSetCommand(), new XPSetCommand(), new DailyQuestCommand())
+                .addSlashCommands(new VerificationButtonSendCommand(), new SendCommand(), new WarnCommand(), new MuteCommand(), new RolesChannelSetupCommand(), new TestCommand(), new CreateDevBlogCommand(), new ResetTimerCommand(), new DiscordProfileCommand(), new LevelSetCommand(), new XPSetCommand(), new DailyQuestCommand(), new DatabaseSetupCommand())
                 .setHelpWord(null)
                 .setActivity(Activity.watching("Florial"));
         CommandClient commandClient = builder.build();
@@ -85,6 +85,7 @@ public class FlorialBot {
             SubscribeButtonListener.init();
             RoleButtonListener.init();
             RolesChannelSetupCommand.init();
+            DatabaseSetupCommand.init();
         }, 1, TimeUnit.SECONDS);
 
     }
@@ -95,10 +96,4 @@ public class FlorialBot {
         }
     }
 
-    public static List<DiscordProfile> getActiveQuestCache() {
-        return activeQuestCache;
-    }
-    public static void addUUIDToActiveQuestCache(DiscordProfile profile) {
-        activeQuestCache.add(profile);
-    }
 }

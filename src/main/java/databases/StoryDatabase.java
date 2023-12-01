@@ -33,7 +33,9 @@ public class StoryDatabase {
 
         System.out.println("Connected to Database.");
 
-        // createStoryDatabaseIfNotExists();
+         createStoryDatabaseIfNotExists();
+
+
 
         return connection;
     }
@@ -41,7 +43,7 @@ public class StoryDatabase {
     public void createStoryDatabaseIfNotExists() throws SQLException {
         String sql = "CREATE TABLE IF NOT EXISTS stories (" +
                 "id INT AUTO_INCREMENT PRIMARY KEY, required_level INT, name TEXT, part_1 TEXT, part_2 TEXT, part_3 TEXT, image_1 TEXT, image_2 TEXT, image_3 TEXT)";
-        try (Statement statement = connection.createStatement()) {
+        try (Statement statement = getConnection().createStatement()) {
             statement.execute(sql);
         }
     }

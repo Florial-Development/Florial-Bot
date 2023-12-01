@@ -88,14 +88,6 @@ public class DiscordProfile {
         this.tokens = this.tokens + i;
         this.save();
     }
-
-    public void resetQuest() {
-        this.lastQuest = 0;
-        this.currentQuestId = 0;
-        this.questProgress = 0;
-        this.save();
-    }
-
     public void progressInQuest(User user) {
 
         this.questProgress++;
@@ -107,19 +99,16 @@ public class DiscordProfile {
             int earnedTokens = new Random().nextInt(15);
             int experienceGained = this.lvl * 100 / 12;
 
-            EmbedBuilder e = new EmbedBuilder().setTitle("<:crystalheart:1168455971958439936>          **DAILY QUEST COMPLETED!**        <:crystalheart:1168455971958439936>")
+            EmbedBuilder e = new EmbedBuilder().setTitle("<:crystalheart:1168455971958439936>       **DAILY QUEST COMPLETED!**      <:crystalheart:1168455971958439936>")
                     .addField("**Description**", quest.getDescription(), false)
                     .addField("**Progress**", "" + generateProgressBar((int) Math.round(((double) this.questProgress / amountNeeded) * 100)), false)
                     .addField("**Tokens Earned**", "`" + earnedTokens + "`", false)
                     .addField("**XP Earned**", "`" + experienceGained + "`", false)
-
-
-                    .addField("**━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━**", "", true)
+                    .addField("**━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━**", "Do /dailyquest in any channel again to get a new one. Quests reset everyday at 12AM CST!", false)
                     .setColor(Color.pink)
                     .setImage("https://media.discordapp.net/attachments/564923688621834251/1179691284345143346/image.png?ex=657ab41f&is=65683f1f&hm=59d395f770ca7894990b65bc32258e3161cf220b6478c2bb37d8332fae59599f&=&format=webp&quality=lossless")
                     .setThumbnail("https://media.discordapp.net/attachments/564923688621834251/1179724541283536957/arrowup.png?ex=657ad318&is=65685e18&hm=eeb2a0eb2e96bd0df9429e94d1f74a78b85020d67ee9827c6af3d3c09507b121&=&format=webp&quality=lossless");
 
-            this.resetQuest();
             gainExperience(experienceGained, user);
             this.tokens = earnedTokens;
 

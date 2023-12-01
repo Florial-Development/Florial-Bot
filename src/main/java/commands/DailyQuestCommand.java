@@ -7,16 +7,11 @@ import databases.BotDatabase;
 import databases.models.DiscordProfile;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.User;
-import net.dv8tion.jda.api.entities.channel.Channel;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import quests.QuestType;
 
 import java.awt.*;
-import java.sql.SQLException;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
+import java.time.*;
 
 @CommandInfo(name = "dailyquest")
 public class DailyQuestCommand extends SlashCommand {
@@ -31,26 +26,24 @@ public class DailyQuestCommand extends SlashCommand {
         User user = slashCommandEvent.getUser();
 
         DiscordProfile profile = BotDatabase.getInstance().findProfileByUUID(user.getIdLong());
-
-        LocalDateTime lastQuestTime = LocalDateTime.ofEpochSecond(profile.getLastQuest(), 0, ZoneOffset.UTC);
+        long lastQuest = profile.getLastQuest();
 
         ZoneId cstZone = ZoneId.of("America/Chicago");
-        ZonedDateTime lastQuestCST = lastQuestTime.atZone(cstZone);
-
+        ZonedDateTime lastQuestCST = Instant.ofEpochSecond(lastQuest).atZone(cstZone);
         ZonedDateTime nowCST = ZonedDateTime.now(cstZone);
+        //ZonedDateTime nowCST = ZonedDateTime.now(cstZone).plusHours(30);
 
-        if (nowCST.toLocalDate().isAfter(lastQuestCST.toLocalDate()) || profile.getLastQuest() == 0) {
+
+        if (lastQuest == 0 || nowCST.isAfter(lastQuestCST.plusDays(1).withHour(0).withMinute(0).withSecond(0))) {
             profile.setLastQuest(nowCST.toEpochSecond());
             profile.setCurrentQuestId(QuestType.getRandomQuest().getId());
             profile.setQuestProgress(0);
             profile.save();
             generateQuestEmbed((TextChannel) slashCommandEvent.getChannel(), profile.getCurrentQuestId(), profile);
-            slashCommandEvent.reply("Quest Generated:").queue();
+            slashCommandEvent.reply("You have been generated a daily quest!").queue();
         } else {
-
             generateQuestEmbed((TextChannel) slashCommandEvent.getChannel(), profile.getCurrentQuestId(), profile);
-            slashCommandEvent.reply("Quest Progress:").queue();
-
+            slashCommandEvent.reply("Here is your quest progress!:").queue();
         }
     }
 
@@ -60,7 +53,7 @@ public class DailyQuestCommand extends SlashCommand {
 
         QuestType quest = QuestType.findQuestTypeById(questId);
 
-        EmbedBuilder e = new EmbedBuilder().setTitle("<:crystalheart:1168455971958439936>                           **DAILY QUEST**               <:crystalheart:1168455971958439936>")
+        EmbedBuilder e = new EmbedBuilder().setTitle("<:crystalheart:1168455971958439936>                           **DAILY QUEST**                    <:crystalheart:1168455971958439936>")
                 .addField("**Description**                     ✰ ", quest.getDescription(), true)
                 .addField("                               **Progress**", "                                 " + profile.generateProgressBar((int) Math.round(((double) profile.getQuestProgress() / quest.getAmountNeeded()) * 100)), true)
                 .setColor(Color.pink)

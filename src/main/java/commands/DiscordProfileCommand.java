@@ -30,6 +30,7 @@ public class DiscordProfileCommand extends SlashCommand {
 
         DiscordProfile profile = botDatabase.findProfileByUUID(user.getIdLong());
 
+        slashCommandEvent.reply("Fetching profile of " + user.getName() + " for you, " + slashCommandEvent.getUser().getName() + "!").queue();
         profile.fetchProfile(slashCommandEvent.getChannel(), user);
 
 

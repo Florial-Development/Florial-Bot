@@ -36,15 +36,23 @@ public class TestCommand extends SlashCommand {
         }
 
 
-        DiscordProfile profile = BotDatabase.getInstance().findProfileByUUID(user.getIdLong());
+       // DiscordProfile profile = BotDatabase.getInstance().findProfileByUUID(user.getIdLong());
 
-        profile.fetchProfile(slashCommandEvent.getChannel(), user);
+      //  profile.fetchProfile(slashCommandEvent.getChannel(), user);
 
      //   profile.setReadWhen(System.currentTimeMillis() + (25 * 3600000));
 
        // profile.gainExperience(slashCommandEvent.getOption("amount").getAsInt(), user);
 
+      //  EmbedBuilder e = new EmbedBuilder().setTitle("<:crystalheart:1168455971958439936>        **Enjoy Your Stay!**       <:crystalheart:1168455971958439936>")
+             //   .addField("", "", false)
+              //  .addField("**━━━━━━━━━━━━━━━━━━━━━━━━━**", "", true)
+               // .addField("<:crystalheart:1168455971958439936> " + user.getEffectiveName() + " <:crystalheart:1168455971958439936> ~", "", false)
+              //  .setColor(Color.pink)
+              //  .setThumbnail(user.getAvatarUrl())
+              //  .setImage("https://media.discordapp.net/attachments/842010486009626625/1180090125296869376/wlcom.jpg?ex=657c2792&is=6569b292&hm=607db58434156ccb4905e695f4ca0093af9b555379232dc94efc2f7d03f19082&=&format=webp");
 
+      //  slashCommandEvent.replyEmbeds(e.build()).queue();
 
 
     }

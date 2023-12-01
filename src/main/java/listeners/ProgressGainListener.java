@@ -25,9 +25,9 @@ public class ProgressGainListener extends ListenerAdapter {
 
         User user = event.getAuthor();
 
-        Member member = event.getMember();
-
         if (user.isBot() || (!(event.isFromGuild())) || event.getChannel() == botDMs) return;
+
+        Member member = event.getMember();
 
         DiscordProfile profile = BotDatabase.getInstance().findProfileByUUID(user.getIdLong());
 
@@ -37,20 +37,17 @@ public class ProgressGainListener extends ListenerAdapter {
 
             ZonedDateTime lastQuestDateTime = ZonedDateTime.ofInstant(Instant.ofEpochSecond(profile.getLastQuest()), cstZone);
 
-            ZonedDateTime next12AM;
-            next12AM = ZonedDateTime.now(cstZone).with(LocalTime.of(0, 0)).plusDays(1);
+            ZonedDateTime next12AM = ZonedDateTime.now(cstZone).with(LocalTime.of(0, 0)).plusDays(1);
 
-            if (lastQuestDateTime.isBefore(next12AM)) {
-                QuestType quest = QuestType.findQuestTypeById(profile.getCurrentQuestId());
+            QuestType quest = QuestType.findQuestTypeById(profile.getCurrentQuestId());
+
+            if (lastQuestDateTime.isBefore(next12AM) && profile.getQuestProgress() < quest.getAmountNeeded()) {
                 long specificChannelId = quest.getSpecificChannelId();
                 if (specificChannelId != 0 && event.getChannel().getIdLong() == specificChannelId) {
                     profile.progressInQuest(user);
                 } else if (specificChannelId == 0) {
                     profile.progressInQuest(user);
                 }
-            } else {
-                profile.resetQuest();
-
             }
 
         }

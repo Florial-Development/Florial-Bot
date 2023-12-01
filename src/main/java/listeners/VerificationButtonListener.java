@@ -1,6 +1,7 @@
 package listeners;
 
 import bot.FlorialBot;
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -17,8 +18,10 @@ public class VerificationButtonListener extends ListenerAdapter {
 
         if (event.getComponentId().equals("verification")) {
 
-            Role tulip = FlorialBot.getDiscordServer().getRoleById("801913598644846604");
-            Role awaiting = FlorialBot.getDiscordServer().getRoleById("1055994303350063208");
+            Guild discord = FlorialBot.getDiscordBot().getGuildById("801913598481268766");
+
+            Role tulip = discord.getRoleById("801913598644846604");
+            Role awaiting = discord.getRoleById("1055994303350063208");
 
             if (event.getMember().getRoles().contains(tulip)) {
                 event.reply("You are already verified.").setEphemeral(true).queue();
@@ -28,7 +31,7 @@ public class VerificationButtonListener extends ListenerAdapter {
                 return;
             }
 
-            FlorialBot.getDiscordServer().addRoleToMember(event.getUser(), awaiting).queue();
+            discord.addRoleToMember(event.getUser(), awaiting).queue();
 
             TextInput where = createTextInput("where", "How did you find Florial?", "Be sure to be specific.", TextInputStyle.SHORT, 10, 100);
             TextInput why = createTextInput("why", "Why did you want to join us?", "Be sure to be specific.", TextInputStyle.PARAGRAPH, 45, 1000);

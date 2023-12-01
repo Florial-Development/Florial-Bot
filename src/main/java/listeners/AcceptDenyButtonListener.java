@@ -11,6 +11,9 @@ import net.dv8tion.jda.api.requests.RestAction;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class AcceptDenyButtonListener extends ListenerAdapter {
 
@@ -21,7 +24,7 @@ public class AcceptDenyButtonListener extends ListenerAdapter {
 
     public static void init() {
 
-        discordServer = FlorialBot.getDiscordServer();
+        discordServer = FlorialBot.getDiscordBot().getGuildById("801913598481268766");
 
         rolesToAdd.add(discordServer.getRoleById("801913598644846604"));    // tulip
         rolesToAdd.add(discordServer.getRoleById("1055271837120086016"));   // pronoundiv
@@ -48,12 +51,19 @@ public class AcceptDenyButtonListener extends ListenerAdapter {
 
                 event.reply("The member has been granted access to the server!").queue();
 
+
+                ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(2);
+
                 for (Role role : rolesToAdd) {
-                    discordServer.addRoleToMember(user, role).queue();
+                    scheduler.schedule(() -> {
+                        discordServer.addRoleToMember(user, role).queue();
+                    }, 100, TimeUnit.MILLISECONDS);
                 }
 
                 for (Role role : rolesToRemove) {
-                    discordServer.removeRoleFromMember(user, role).queue();
+                    scheduler.schedule(() -> {
+                        discordServer.removeRoleFromMember(user, role).queue();
+                    }, 100, TimeUnit.MILLISECONDS);
                 }
 
                 user.openPrivateChannel().queue((channel2) -> channel2.sendMessage("You have been accepted into Florial Official. Have fun! Be sure to read up on us and interact regularly. :)" +

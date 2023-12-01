@@ -1,5 +1,6 @@
 package databases;
 
+import bot.FlorialBot;
 import databases.models.DiscordProfile;
 
 import java.sql.*;
@@ -13,6 +14,7 @@ public class BotDatabase {
     private static final String DATABASE = "";
     private static final String USERNAME = "";
     private static final String PASSWORD = "";
+
 
     public static BotDatabase getInstance() {
         if (instance == null) {
@@ -33,6 +35,8 @@ public class BotDatabase {
 
         createDatabaseIfNotExists();
 
+
+
         return connection;
     }
 
@@ -44,7 +48,7 @@ public class BotDatabase {
         String sql = "CREATE TABLE IF NOT EXISTS discord_profiles(uuid varchar(36) primary key, devblogs int, tokens int, readwhen long, xp int, lvl int, quest_progress int, quest_id int, lastquest long)";
         statement.execute(sql);
 
-        String createIndexSQL = "CREATE INDEX idx_uuid ON discord_profiles (uuid)";
+       // String createIndexSQL = "CREATE INDEX idx_uuid ON discord_profiles (uuid)";
          //statement.execute(createIndexSQL);
     }
 
@@ -72,33 +76,43 @@ public class BotDatabase {
     }
 
     public DiscordProfile findProfileByUUID(long u) {
-        try {
-            PreparedStatement statement = getConnection().prepareStatement("SELECT devblogs, tokens, readwhen, xp, lvl, quest_progress, quest_id, lastquest FROM discord_profiles WHERE uuid = ?");
-            statement.setLong(1, u);
 
-            ResultSet results = statement.executeQuery();
+        if (FlorialBot.getActiveProfileCache().get(u) != null) {
+            return FlorialBot.getActiveProfileCache().get(u);
+        } else {
 
-            if (results.next()) {
-                int devBlogs = results.getInt("devblogs");
-                int tokens = results.getInt("tokens");
-                long readWhen = results.getLong("readwhen");
-                int xp = results.getInt("xp");
-                int lvl = results.getInt("lvl");
-                int questProgress = results.getInt("quest_progress");
-                int currentQuest = results.getInt("quest_id");
-                long lastQuest = results.getLong("lastquest");
+            try {
+                PreparedStatement statement = getConnection().prepareStatement("SELECT devblogs, tokens, readwhen, xp, lvl, quest_progress, quest_id, lastquest FROM discord_profiles WHERE uuid = ?");
+                statement.setLong(1, u);
 
-                statement.close();
-                return new DiscordProfile(u, devBlogs, tokens, readWhen, lastQuest, xp, lvl, questProgress, currentQuest);
-            } else {
-                statement.close();
+                ResultSet results = statement.executeQuery();
+
+                if (results.next()) {
+                    int devBlogs = results.getInt("devblogs");
+                    int tokens = results.getInt("tokens");
+                    long readWhen = results.getLong("readwhen");
+                    int xp = results.getInt("xp");
+                    int lvl = results.getInt("lvl");
+                    int questProgress = results.getInt("quest_progress");
+                    int currentQuest = results.getInt("quest_id");
+                    long lastQuest = results.getLong("lastquest");
+
+                    statement.close();
+                    DiscordProfile profile = new DiscordProfile(u, devBlogs, tokens, readWhen, lastQuest, xp, lvl, questProgress, currentQuest);
+                    FlorialBot.getActiveProfileCache().put(u, profile);
+                    return profile;
+                } else {
+                    statement.close();
+                    return null;
+                }
+            } catch (SQLException e) {
+                System.out.println("PROFILE RETURNED NULL / COULD NOT CREATE FOR USER WITH ID: " + u + "  ");
+                e.printStackTrace();
                 return null;
             }
-        } catch (SQLException e) {
-            System.out.println("PROFILE RETURNED NULL / COULD NOT CREATE FOR USER WITH ID: " + u + "  ");
-            e.printStackTrace();
-            return null;
         }
+
+
     }
 
     public void deleteProfile(long u) throws SQLException {
