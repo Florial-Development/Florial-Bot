@@ -1,2 +1,1 @@
-# Florial-Bot
-in progress.
+# Florial - Discord Bot
