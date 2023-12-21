@@ -13,7 +13,7 @@ public class DMListener extends ListenerAdapter {
     @Override
     public void onMessageReceived(MessageReceivedEvent event) {
 
-        if (event.getAuthor().isBot() || (event.getChannel() != botDMs)) {
+        if (event.getAuthor().isBot() || (event.getChannel() == botDMs)) {
             return;
         }
 

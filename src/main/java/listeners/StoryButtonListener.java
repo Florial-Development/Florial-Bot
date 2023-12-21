@@ -61,6 +61,8 @@ public class StoryButtonListener extends ListenerAdapter {
 
             event.getMessage().delete().queue();
 
+            System.out.println("" + event.getUser().getName() + " just unlocked a story.");
+
 
         }
     }

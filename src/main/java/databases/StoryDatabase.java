@@ -1,5 +1,6 @@
 package databases;
 
+import bot.FlorialBot;
 import databases.models.Story;
 
 import java.sql.*;
@@ -11,9 +12,9 @@ public class StoryDatabase {
     private static StoryDatabase instance;
 
 
-    private static final String DATABASE = "";
-    private static final String USERNAME = "";
-    private static final String PASSWORD = "";
+    private final String DATABASE = FlorialBot.getDATABASE();
+    private final String USERNAME = FlorialBot.getDATABASE_USER();
+    private final String PASSWORD = FlorialBot.getDATABASE_PASSWORD();
 
     public static StoryDatabase getInstance() {
         if (instance == null) {

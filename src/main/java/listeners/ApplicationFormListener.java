@@ -4,6 +4,7 @@ import bot.FlorialBot;
 import lombok.NonNull;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.events.interaction.ModalInteractionEvent;
@@ -25,6 +26,7 @@ public class ApplicationFormListener extends ListenerAdapter {
 
             Guild server = FlorialBot.getDiscordBot().getGuildById("801913598481268766");
             TextChannel verificationApplicationChannel = server.getTextChannelById("950565475107098654");
+            Role awaiting = server.getRoleById("1055994303350063208");
 
             User user = event.getUser();
 
@@ -35,6 +37,7 @@ public class ApplicationFormListener extends ListenerAdapter {
 
             event.reply("Request submitted.").setEphemeral(true).queue();
 
+            server.addRoleToMember(event.getUser(), awaiting).queue();
 
             EmbedBuilder e = new EmbedBuilder().setTitle("**Verification Application of " + user.getName() + "**")
                     .setFooter("Press the buttons below to accept or deny entry.")

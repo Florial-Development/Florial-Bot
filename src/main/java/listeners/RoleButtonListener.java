@@ -12,7 +12,7 @@ public class RoleButtonListener extends ListenerAdapter {
 
     public static void init() {
 
-        discordServer = FlorialBot.getDiscordServer();
+        discordServer = FlorialBot.getDiscordBot().getGuildById("801913598481268766");
     }
 
     @Override

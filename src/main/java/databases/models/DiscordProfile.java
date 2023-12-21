@@ -66,6 +66,7 @@ public class DiscordProfile {
 
     }
 
+
     public void delete()  {
 
         try {
@@ -133,6 +134,8 @@ public class DiscordProfile {
             this.lvl++;
             this.xp = totalXP - levelUpThreshold;
             int earnedTokens = 10 + this.lvl;
+
+            System.out.println("" + user.getName() + " just unlocked leveled up:" + this.lvl);
 
             this.gainTokens(earnedTokens);
 

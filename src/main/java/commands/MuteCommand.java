@@ -1,12 +1,11 @@
 package commands;
 
-import bot.FlorialBot;
 import com.jagrosh.jdautilities.command.SlashCommand;
 import com.jagrosh.jdautilities.command.SlashCommandEvent;
 import com.jagrosh.jdautilities.doc.standard.CommandInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 
@@ -16,11 +15,10 @@ import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-@CommandInfo(name = "mute", requirements = {})
+@CommandInfo(name = "mute")
 public class MuteCommand extends SlashCommand {
 
     private static final int MAX_DURATION = 1209600;
-    private static final Role trustedRole = FlorialBot.getTrustedRole();
 
     public MuteCommand() {
         this.name = "mute";
@@ -30,6 +28,7 @@ public class MuteCommand extends SlashCommand {
         options.add(new OptionData(OptionType.STRING, "reason", "The punishment reason").setRequired(true));
         options.add(new OptionData(OptionType.STRING, "duration", "The length of the punishment").setRequired(true));
         this.options = options;
+        this.userPermissions = new Permission[]{Permission.MESSAGE_MANAGE};
     }
 
     @Override
@@ -37,11 +36,6 @@ public class MuteCommand extends SlashCommand {
         Member member = slashCommandEvent.getMember();
         if (member == null) {
             respondWithError(slashCommandEvent, "There was an error trying to perform this command");
-            return;
-        }
-
-        if (!slashCommandEvent.getMember().getRoles().contains(trustedRole)) {
-            respondWithError(slashCommandEvent, "No permissions");
             return;
         }
 

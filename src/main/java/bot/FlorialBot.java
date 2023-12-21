@@ -21,7 +21,11 @@ import java.util.concurrent.TimeUnit;
 
 public class FlorialBot {
 
-    private static final String BOT_TOKEN = "";
+    private static String BOT_TOKEN;
+
+    @Getter public static String DATABASE;
+    @Getter public static String DATABASE_USER;
+    @Getter public static String DATABASE_PASSWORD;
     @Getter
     private static JDA discordBot;
     @Getter private static Role trustedRole;
@@ -36,11 +40,15 @@ public class FlorialBot {
 
     public static void main(String[] args) {
 
-        FlorialBot bot = new FlorialBot();
+
+        BOT_TOKEN = System.getenv("TOKEN");
+        DATABASE = System.getenv("DATABASE");
+        DATABASE_USER = System.getenv("DATABASE_USER");
+        DATABASE_PASSWORD = System.getenv("DATABASE_PASS");
+
+        Runtime.getRuntime().addShutdownHook(new Thread(FlorialBot::shutdownBot));
 
         initializeDiscord();
-
-        Runtime.getRuntime().addShutdownHook(new Thread(bot::shutdownBot));
 
     }
 
@@ -52,7 +60,7 @@ public class FlorialBot {
                 .forceGuildOnly("801913598481268766")
                 .setOwnerId("349819317589901323")
                 .setCoOwnerIds("366301720109776899")
-                .addSlashCommands(new VerificationButtonSendCommand(), new SendCommand(), new WarnCommand(), new MuteCommand(), new RolesChannelSetupCommand(), new TestCommand(), new CreateDevBlogCommand(), new ResetTimerCommand(), new DiscordProfileCommand(), new LevelSetCommand(), new XPSetCommand(), new DailyQuestCommand(), new DatabaseSetupCommand())
+                .addSlashCommands(new VerificationButtonSendCommand(), new SendCommand(), new WarnCommand(), new MuteCommand(), new RolesChannelSetupCommand(), new TestCommand(), new CreateDevBlogCommand(), new AnnounceCommand(), new DiscordProfileCommand(), new LevelSetCommand(), new XPSetCommand(), new DailyQuestCommand(), new DatabaseSetupCommand())
                 .setHelpWord(null)
                 .setActivity(Activity.watching("Florial"));
         CommandClient commandClient = builder.build();
@@ -86,11 +94,11 @@ public class FlorialBot {
             RoleButtonListener.init();
             RolesChannelSetupCommand.init();
             DatabaseSetupCommand.init();
-        }, 1, TimeUnit.SECONDS);
+        }, 3, TimeUnit.SECONDS);
 
     }
 
-    private void shutdownBot() {
+    private static void shutdownBot() {
         if (discordBot != null) {
             discordBot.shutdown();
         }

@@ -31,8 +31,6 @@ public class VerificationButtonListener extends ListenerAdapter {
                 return;
             }
 
-            discord.addRoleToMember(event.getUser(), awaiting).queue();
-
             TextInput where = createTextInput("where", "How did you find Florial?", "Be sure to be specific.", TextInputStyle.SHORT, 10, 100);
             TextInput why = createTextInput("why", "Why did you want to join us?", "Be sure to be specific.", TextInputStyle.PARAGRAPH, 45, 1000);
             TextInput did = createTextInput("did", "Did you read our rules? If so, explain one.", "Be sure to explain a rule.", TextInputStyle.PARAGRAPH, 30, 100);
