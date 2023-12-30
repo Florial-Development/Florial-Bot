@@ -32,7 +32,6 @@ public class FlorialBot {
     @Getter private static Role subscribedRole;
 
     @Getter private static Guild discordServer;
-    @Getter private static TextChannel botDMs;
     @Getter private static TextChannel verifyChannel;
 
     @Getter private static final HashMap<Long, DiscordProfile> activeProfileCache = new HashMap<>();
@@ -86,7 +85,6 @@ public class FlorialBot {
         scheduler.schedule(() -> {
             discordServer = discordBot.getGuildById("801913598481268766");
             trustedRole = discordServer.getRoleById("1036874193943396352");
-            botDMs = discordBot.getTextChannelById("950565475107098654");
             verifyChannel = discordServer.getTextChannelById("950565475107098654");
             subscribedRole = discordServer.getRoleById("919364626003689494");
             AcceptDenyButtonListener.init();
@@ -94,6 +92,7 @@ public class FlorialBot {
             RoleButtonListener.init();
             RolesChannelSetupCommand.init();
             DatabaseSetupCommand.init();
+            DMListener.init();
         }, 3, TimeUnit.SECONDS);
 
     }

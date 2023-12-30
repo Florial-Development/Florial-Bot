@@ -1,16 +1,18 @@
 package listeners;
 
-import bot.FlorialBot;
 import databases.BotDatabase;
 import databases.models.DiscordProfile;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.User;
-import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
+import net.dv8tion.jda.api.entities.channel.ChannelType;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import quests.QuestType;
 
-import java.time.*;
+import java.time.Instant;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
@@ -18,14 +20,12 @@ import java.util.Random;
 public class ProgressGainListener extends ListenerAdapter {
 
     private static final List<String> valuableChannels = Arrays.asList("919361125739548743", "919361125739548743", "938256684286083132", "943028902828322826");
-    private static final TextChannel botDMs = FlorialBot.getBotDMs();
-
     @Override
     public void onMessageReceived(MessageReceivedEvent event) {
 
         User user = event.getAuthor();
 
-        if (user.isBot() || (!(event.isFromGuild())) || event.getChannel() == botDMs) return;
+        if (user.isBot() || (!(event.isFromGuild())) || event.getMessage().isFromType(ChannelType.PRIVATE)) return;
 
         Member member = event.getMember();
 
